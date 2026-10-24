@@ -33,7 +33,7 @@ protected:
     if (v.sz != sz) throw invalid_argument("Vector dimension mismatch");
   }
 public:
-  TDynamicVector(size_t size = 1) : sz(checked_size(size)), pMem(new T[sz]) {}
+  TDynamicVector(size_t size = 1) : sz(checked_size(size)), pMem(new T[sz]()) {}
   TDynamicVector(T* arr, size_t s) : sz(checked_size(s)) {
     if (arr == nullptr)
       throw invalid_argument("TDynamicVector ctor requires non-nullptr arg");
@@ -158,7 +158,7 @@ public:
     }
     return result;
   }
-  TDynamicVector operator-=(const TDynamicVector& v) {
+  TDynamicVector& operator-=(const TDynamicVector& v) {
     same_size(v);
     for (size_t i = 0; i < sz; ++i) {
       pMem[i] = pMem[i] - v.pMem[i];
@@ -302,7 +302,7 @@ public:
         for (size_t j = 0; j < sz; j++) {
           temp[j] = m.pMem[j][k];
         }
-        result.pMem[i][k] += pMem[i] * temp;
+        result.pMem[i][k] = pMem[i] * temp;
       }
     }
     return result;
