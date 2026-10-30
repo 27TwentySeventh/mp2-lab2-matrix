@@ -38,10 +38,24 @@ public:
     if (arr == nullptr)
       throw invalid_argument("TDynamicVector ctor requires non-nullptr arg");
     pMem = new T[sz];
-    std::copy(arr, arr + sz, pMem);
+    try {
+      std::copy(arr, arr + sz, pMem);
+    }
+    catch (...) {
+      delete[] pMem;
+      throw;
+    }
+
   }
   TDynamicVector(const TDynamicVector& v): sz(v.sz), pMem(new T[sz]) {
-    for (size_t i = 0; i < sz; ++i) pMem[i] = v.pMem[i];
+    try {
+      for (size_t i = 0; i < sz; ++i)
+        pMem[i] = v.pMem[i];
+    }
+    catch (...) {
+      delete[] pMem;
+      throw;
+    }
   }
   TDynamicVector(TDynamicVector&& v) noexcept: sz(v.sz), pMem(v.pMem) {
     v.sz = 0;
